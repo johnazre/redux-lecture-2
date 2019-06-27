@@ -1,26 +1,40 @@
 import React, { useState } from 'react'
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap'
+import { addTodo } from '../redux/actions/todos'
+import { connect } from 'react-redux'
+import { ITodo } from '../types'
 
-const AddTodoForm: React.FC = () => {
+interface ATFProps {
+  addTodo(todo: ITodo): void
+}
+
+const AddTodoForm = (props: ATFProps) => {
   const [title, setTitle] = useState('')
 
-  // not done
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {}
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    props.addTodo({
+      title,
+      completed: false
+    })
+  }
 
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup>
-        <Label>Email</Label>
+        <Label>New Todo</Label>
         <Input
           type="text"
           name="title"
           onChange={e => setTitle(e.target.value)}
         />
-        <Button type="submit">Submit</Button>
       </FormGroup>
       <Button>Submit</Button>
     </Form>
   )
 }
 
-export default AddTodoForm
+export default connect(
+  null,
+  { addTodo }
+)(AddTodoForm)

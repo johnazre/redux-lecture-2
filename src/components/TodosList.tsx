@@ -7,14 +7,12 @@ import { fetchTodos } from '../redux/actions/todos'
 
 interface TodosListProps {
   todos: ITodo[]
-  fetchTodos(todos: ITodo[]): void
+  fetchTodos(): void
 }
 
 const TodosList = (props: TodosListProps) => {
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/todos`)
-      .then(res => res.json())
-      .then(todos => props.fetchTodos(todos))
+    props.fetchTodos()
   }, [])
 
   let listOfTodos = props.todos.map((todo: ITodo) => (
@@ -23,12 +21,7 @@ const TodosList = (props: TodosListProps) => {
   return <ListGroup>{listOfTodos}</ListGroup>
 }
 
-function mapStateToProps(storeState: any) {
-  console.log('store state', storeState)
-  return {
-    todos: storeState.todos
-  }
-}
+const mapStateToProps = (storeState: any) => ({ todos: storeState.todos })
 
 export default connect(
   mapStateToProps,
